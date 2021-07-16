@@ -79,7 +79,7 @@ function App() {
             : timerStatus
             ? "bg-red-400"
             : "bg-gray-400") +
-          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start justify-center md:justify-between border-2 bg-opacity-50 p-6 md:p-8 rounded-3xl shadow-md"
+          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start justify-center md:justify-between border-2 bg-opacity-50 p-5 md:p-8 rounded-3xl shadow-md"
         }
       >
         <div className="row-span-1">
@@ -147,29 +147,31 @@ function App() {
           id="timer-label"
         >
           <div
-            className="flex flex-col items-center justify-center text-5xl md:text-3xl"
+            className="flex flex-col items-center justify-center text-4xl md:text-3xl"
             id="timer-left"
           >
             {breakStatus ? (
               <>
-                <p className="my-3 md:my-1 font-serif text-gray-600">
+                <p className="my-3 md:my-2 font-serif text-gray-600">
                   Break time!!
                 </p>
-                <p className="my-3 md:my-1">{convertTime(breakTimeLeft[0])}</p>
+                <p className="my-3 md:my-2 text-6xl">
+                  {convertTime(breakTimeLeft[0])}
+                </p>
               </>
             ) : (
               <>
-                <p className="my-3 md:my-1 font-serif text-gray-600">
+                <p className="my-3 md:my-2 font-serif text-gray-600">
                   Current session
                 </p>
-                <p className="my-3 md:my-1">
+                <p className="my-3 md:my-2 text-6xl">
                   {convertTime(sessionLengthLeft[0])}
                 </p>
               </>
             )}
           </div>
         </div>
-        <div className="self-end md:self-center row-start-5 row-end-6">
+        <div className="self-end md:self-center row-start-4 row-end-5">
           <div className="m-2 flex justify-center" id="session-count">
             {sessionCount > 0 && "Sessions: " + sessionCount}
           </div>
