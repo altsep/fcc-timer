@@ -71,7 +71,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col items-center text-2xl bg-gray-50  h-screen text-gray-900 font-normal text-shadow-sm">
+    <div className="flex flex-col items-center text-3xl md:text-2xl bg-gray-50 h-screen text-gray-900 font-normal text-shadow-sm">
       <div
         className={
           (breakStatus
@@ -79,104 +79,117 @@ function App() {
             : timerStatus
             ? "bg-red-400"
             : "bg-gray-400") +
-          " mt-8 flex flex-col items-start bg-opacity-50 p-12 rounded-3xl shadow-md"
+          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start justify-center md:justify-between border-2 bg-opacity-50 p-6 md:p-8 rounded-3xl shadow-md"
         }
       >
-        <div
-          className="m-2 flex flex-row items-center justify-between w-full"
-          id="session-label"
-        >
-          <p>Session length:&nbsp;</p>
-          <div className="flex flex-row items-center">
-            <div id="session-decrement">
-              <button
-                className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-5 h-5 rounded-full text-lg  font-thin shadow-md"
-                onClick={() =>
-                  sessionLength > 5 && setSessionLength((s) => s - 1)
-                }
-              >
-                -
-              </button>
-            </div>
-            <div className="" id="session-length">
-              {convertTime(sessionLength * 60)}
-            </div>
-            <div className="" id="session-increment">
-              <button
-                className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-5 h-5 rounded-full text-lg  font-thin shadow-md"
-                onClick={() => {
-                  sessionLength < 180 && setSessionLength((s) => s + 1);
-                }}
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-        <div
-          className="m-2 flex flex-row justify-between w-full"
-          id="break-label"
-        >
-          <p>Break time:&nbsp;</p>
-          <div className="flex flex-row items-center">
-            <div className="" id="break-decrement">
-              <button
-                className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-5 h-5 rounded-full text-lg  font-thin shadow-md"
-                onClick={() => breakTime > 0 && setBreakTime((s) => s - 1)}
-              >
-                -
-              </button>
-            </div>
-            <div className="" id="break-length">
-              {convertTime(breakTime * 60)}
-            </div>
-            <div className="" id="break-increment">
-              <button
-                className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-5 h-5 rounded-full text-lg  font-thin shadow-md"
-                onClick={() => breakTime < 60 && setBreakTime((s) => s + 1)}
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="m-2 self-center" id="timer-label">
+        <div className="row-span-1">
           <div
-            className="flex flex-col items-center justify-center text-3xl"
+            className="m-2 flex flex-row items-center justify-between w-full"
+            id="session-label"
+          >
+            <p className="font-serif text-gray-600">Session length:&nbsp;</p>
+            <div className="flex flex-row items-center">
+              <div id="session-decrement">
+                <button
+                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg font-thin shadow-md"
+                  onClick={() =>
+                    sessionLength > 5 && setSessionLength((s) => s - 1)
+                  }
+                >
+                  -
+                </button>
+              </div>
+              <div className="" id="session-length">
+                {convertTime(sessionLength * 60)}
+              </div>
+              <div className="" id="session-increment">
+                <button
+                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  onClick={() => {
+                    sessionLength < 180 && setSessionLength((s) => s + 1);
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            className="m-2 flex flex-row justify-between w-full"
+            id="break-label"
+          >
+            <p className="font-serif text-gray-600">Break time:&nbsp;</p>
+            <div className="flex flex-row items-center">
+              <div className="" id="break-decrement">
+                <button
+                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  onClick={() => breakTime > 0 && setBreakTime((s) => s - 1)}
+                >
+                  -
+                </button>
+              </div>
+              <div className="" id="break-length">
+                {convertTime(breakTime * 60)}
+              </div>
+              <div className="" id="break-increment">
+                <button
+                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  onClick={() => breakTime < 60 && setBreakTime((s) => s + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="m-2 self-center justify-self-center row-span-2"
+          id="timer-label"
+        >
+          <div
+            className="flex flex-col items-center justify-center text-5xl md:text-3xl"
             id="timer-left"
           >
             {breakStatus ? (
               <>
-                <p className="my-1">Break time!!</p>
-                <p className="my-1">{convertTime(breakTimeLeft[0])}</p>
+                <p className="my-3 md:my-1 font-serif text-gray-600">
+                  Break time!!
+                </p>
+                <p className="my-3 md:my-1">{convertTime(breakTimeLeft[0])}</p>
               </>
             ) : (
               <>
-                <p className="my-1">Current session</p>
-                <p className="my-1">{convertTime(sessionLengthLeft[0])}</p>
+                <p className="my-3 md:my-1 font-serif text-gray-600">
+                  Current session
+                </p>
+                <p className="my-3 md:my-1">
+                  {convertTime(sessionLengthLeft[0])}
+                </p>
               </>
             )}
           </div>
         </div>
-        <div className="m-2 " id="session-count">
-          {sessionCount > 0 && "Sessions: " + sessionCount}
-        </div>
-        <div className="self-center flex flex-row justify-center items-center">
-          <div id="start-stop">
-            <button
-              className="m-3 py-2 active:mt-3 px-4 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
-              onClick={() => setTimerStatus((s) => !s)}
-            >
-              Start
-            </button>
+        <div className="self-end md:self-center row-start-5 row-end-6">
+          <div className="m-2 flex justify-center" id="session-count">
+            {sessionCount > 0 && "Sessions: " + sessionCount}
           </div>
-          <div id="reset">
-            <button
-              className="m-3 py-2 active:mt-3 px-4 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
-              onClick={reset}
-            >
-              Reset
-            </button>
+          <div className="flex flex-row justify-center items-center">
+            <div id="start-stop">
+              <button
+                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mt-3 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                onClick={() => setTimerStatus((s) => !s)}
+              >
+                Start
+              </button>
+            </div>
+            <div id="reset">
+              <button
+                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mt-3 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                onClick={reset}
+              >
+                Reset
+              </button>
+            </div>
           </div>
         </div>
         <audio src={ding} id="ding" />
