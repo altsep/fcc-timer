@@ -14,6 +14,10 @@ function App() {
     sessionLengthLeft[1](sessionLength * 60);
   }, [sessionLength]);
 
+  useEffect(() => {
+    breakTimeLeft[1](breakTime * 60);
+  }, [breakTime]);
+
   const formatTime = (time) => {
     const str = time.toString();
     return str.length >= 3
@@ -36,29 +40,24 @@ function App() {
 
   useEffect(() => {
     if (breakStatus) {
-      if (breakTimeLeft[0] === 0) {
-        sessionLengthLeft[1](sessionLength * 60);
-        setBreakStatus(false);
-      }
       return addInterval(breakTimeLeft, timerStatus);
     } else {
-      if (sessionLengthLeft[0] === 0) {
-        breakTimeLeft[1](breakTime * 60);
-        setBreakStatus(true);
-        setSessionCount((s) => s + 1);
-        document.querySelector("#ding").play();
-      }
       return addInterval(sessionLengthLeft, timerStatus);
     }
-  }, [
-    timerStatus,
-    addInterval,
-    sessionLengthLeft,
-    breakTimeLeft,
-    breakStatus,
-    sessionLength,
-    breakTime,
-  ]);
+  }, [breakStatus, timerStatus]);
+
+  useEffect(() => {
+    if (breakStatus && breakTimeLeft[0] === 0) {
+      sessionLengthLeft[1](sessionLength * 60);
+      setBreakStatus(false);
+    } else if (!breakStatus && sessionLengthLeft[0] === 0) {
+      breakTimeLeft[1](breakTime * 60);
+      setBreakStatus(true);
+      document.querySelector("#ding").play();
+    }
+  }, [breakStatus, breakTimeLeft, sessionLengthLeft]);
+
+  useEffect(() => breakStatus && setSessionCount((s) => s + 1), [breakStatus]);
 
   const reset = () => {
     setSessionLength(25);
@@ -79,7 +78,7 @@ function App() {
             : timerStatus
             ? "bg-red-400"
             : "bg-gray-400") +
-          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start md:items-center justify-center md:justify-between border-2 bg-opacity-50 p-5 md:p-8 rounded-3xl shadow-md"
+          " sm:my-3 md:mt-8 md:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-5 grid-cols-1 items-start md:items-center justify-center md:justify-between border-2 bg-opacity-50 p-5 md:p-8 rounded-3xl shadow-md"
         }
       >
         <div className="row-span-1">
@@ -99,10 +98,8 @@ function App() {
                   -
                 </button>
               </div>
-              <div className="" id="session-length">
-                {convertTime(sessionLength * 60)}
-              </div>
-              <div className="" id="session-increment">
+              <div id="session-length">{convertTime(sessionLength * 60)}</div>
+              <div id="session-increment">
                 <button
                   className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
                   onClick={() => {
@@ -120,7 +117,7 @@ function App() {
           >
             <p className="font-serif text-gray-600">Break time:&nbsp;</p>
             <div className="flex flex-row items-center">
-              <div className="" id="break-decrement">
+              <div id="break-decrement">
                 <button
                   className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
                   onClick={() => breakTime > 0 && setBreakTime((s) => s - 1)}
@@ -128,10 +125,8 @@ function App() {
                   -
                 </button>
               </div>
-              <div className="" id="break-length">
-                {convertTime(breakTime * 60)}
-              </div>
-              <div className="" id="break-increment">
+              <div id="break-length">{convertTime(breakTime * 60)}</div>
+              <div id="break-increment">
                 <button
                   className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
                   onClick={() => breakTime < 60 && setBreakTime((s) => s + 1)}
@@ -143,7 +138,7 @@ function App() {
           </div>
         </div>
         <div
-          className="m-2 self-center justify-self-center row-start-2 row-end-3"
+          className="m-2 self-center justify-self-center row-span-2"
           id="timer-label"
         >
           <div
@@ -171,17 +166,17 @@ function App() {
             )}
           </div>
         </div>
-        <div className="self-end md:self-center row-start-4 row-end-5">
+        <div className="self-end md:self-center row-span-2">
           <div className="m-2 flex justify-center" id="session-count">
             {sessionCount > 0 && "Sessions: " + sessionCount}
           </div>
-          <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-row flex-wrap justify-center items-center">
             <div id="start-stop">
               <button
                 className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
                 onClick={() => setTimerStatus((s) => !s)}
               >
-                Start
+                {timerStatus ? "Pause" : "Start"}
               </button>
             </div>
             <div id="reset">
