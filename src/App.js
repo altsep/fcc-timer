@@ -79,7 +79,7 @@ function App() {
             : timerStatus
             ? "bg-red-400"
             : "bg-gray-400") +
-          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start justify-center md:justify-between border-2 bg-opacity-50 p-5 md:p-8 rounded-3xl shadow-md"
+          " mt-3 mb-3 sm:mt-8 sm:mb-auto w-full h-full md:w-auto md:h-3/6 md:flex md:flex-col grid grid-rows-4 items-start md:items-center justify-center md:justify-between border-2 bg-opacity-50 p-5 md:p-8 rounded-3xl shadow-md"
         }
       >
         <div className="row-span-1">
@@ -143,7 +143,7 @@ function App() {
           </div>
         </div>
         <div
-          className="m-2 self-center justify-self-center row-span-2"
+          className="m-2 self-center justify-self-center row-start-2 row-end-3"
           id="timer-label"
         >
           <div
@@ -178,7 +178,7 @@ function App() {
           <div className="flex flex-row justify-center items-center">
             <div id="start-stop">
               <button
-                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mt-3 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
                 onClick={() => setTimerStatus((s) => !s)}
               >
                 Start
@@ -186,10 +186,20 @@ function App() {
             </div>
             <div id="reset">
               <button
-                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mt-3 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
                 onClick={reset}
               >
                 Reset
+              </button>
+            </div>
+            <div id="skip">
+              <button
+                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                onClick={() =>
+                  breakStatus ? breakTimeLeft[1](0) : sessionLengthLeft[1](0)
+                }
+              >
+                Skip
               </button>
             </div>
           </div>
