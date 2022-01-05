@@ -11,40 +11,21 @@ function App() {
   const [sessionCount, setSessionCount] = useState(0);
 
   useEffect(() => {
-    sessionLengthLeft[1](sessionLength * 60);
-  }, [sessionLength]);
-
-  useEffect(() => {
-    breakTimeLeft[1](breakTime * 60);
-  }, [breakTime]);
-
-  const formatTime = (time) => {
-    const str = time.toString();
-    return str.length >= 3
-      ? str.replace(/^\d{1}:/g, "0$&").replace(/(?<=:)\d{1}$/, "0$&")
-      : str.replace(/^\d$/, "0$&");
-  };
-
-  const convertTime = (num) => {
-    const minutes = Math.floor(num / 60);
-    const seconds = num % 60;
-    return formatTime(minutes + ":" + seconds);
-  };
-
-  const addInterval = (time, status) => {
-    const intervalId = setInterval(() => {
-      status && time[0] > 0 && time[1]((s) => s - 1);
-    }, 1000);
-    return () => clearInterval(intervalId);
-  };
-
-  useEffect(() => {
     if (breakStatus) {
       return addInterval(breakTimeLeft, timerStatus);
     } else {
       return addInterval(sessionLengthLeft, timerStatus);
     }
   }, [breakStatus, timerStatus]);
+
+  const addInterval = (time, status) => {
+    const intervalId = setInterval(() => {
+      return status && time[1]((s) => s - 1);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  };
+
+  const audioRef = React.useRef(document.querySelector("#ding"));
 
   useEffect(() => {
     if (breakStatus && breakTimeLeft[0] === 0) {
@@ -53,9 +34,17 @@ function App() {
     } else if (!breakStatus && sessionLengthLeft[0] === 0) {
       breakTimeLeft[1](breakTime * 60);
       setBreakStatus(true);
-      document.querySelector("#ding").play();
+      // audioRef.current.play();
     }
   }, [breakStatus, breakTimeLeft, sessionLengthLeft]);
+
+  useEffect(() => {
+    sessionLengthLeft[1](sessionLength * 60);
+  }, [sessionLength]);
+
+  useEffect(() => {
+    breakTimeLeft[1](breakTime * 60);
+  }, [breakTime]);
 
   useEffect(() => breakStatus && setSessionCount((s) => s + 1), [breakStatus]);
 
@@ -67,10 +56,37 @@ function App() {
     setTimerStatus(false);
     setBreakStatus(false);
     setSessionCount(0);
+    resetAudio(audioRef);
+  };
+
+  const skip = () => {
+    if (breakStatus) {
+      resetAudio(audioRef);
+      return breakTimeLeft[1](0);
+    }
+    return sessionLengthLeft[1](0);
+  };
+
+  const resetAudio = (ref) => {
+    ref.current.pause();
+    ref.current.currentTime = 0;
+  };
+
+  const convertTime = (num) => {
+    const minutes = Math.floor(num / 60);
+    const seconds = num % 60;
+    return formatTime(minutes + ":" + seconds);
+  };
+
+  const formatTime = (time) => {
+    const str = time.toString();
+    return str.length >= 3
+      ? str.replace(/^\d{1}:/g, "0$&").replace(/(?<=:)\d{1}$/, "0$&")
+      : str.replace(/^\d$/, "0$&");
   };
 
   return (
-    <div className="flex flex-col items-center text-3xl md:text-2xl bg-gray-50 h-screen text-gray-900 font-normal text-shadow-sm">
+    <div className="flex flex-col items-center text-3xl md:text-2xl bg-gray-50 h-screen text-gray-900 font-normal text-shadow-sm select-none">
       <div
         className={
           (breakStatus
@@ -90,7 +106,7 @@ function App() {
             <div className="flex flex-row items-center">
               <div id="session-decrement">
                 <button
-                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg font-thin shadow-md"
+                  className="flex justify-center items-center mx-1 transform active:scale-95 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg font-thin shadow-md"
                   onClick={() =>
                     sessionLength > 5 && setSessionLength((s) => s - 1)
                   }
@@ -101,7 +117,7 @@ function App() {
               <div id="session-length">{convertTime(sessionLength * 60)}</div>
               <div id="session-increment">
                 <button
-                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  className="flex justify-center items-center mx-1 transform active:scale-95 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg font-thin shadow-md"
                   onClick={() => {
                     sessionLength < 180 && setSessionLength((s) => s + 1);
                   }}
@@ -119,7 +135,7 @@ function App() {
             <div className="flex flex-row items-center">
               <div id="break-decrement">
                 <button
-                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  className="flex justify-center items-center mx-1 transform active:scale-95 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
                   onClick={() => breakTime > 0 && setBreakTime((s) => s - 1)}
                 >
                   -
@@ -128,7 +144,7 @@ function App() {
               <div id="break-length">{convertTime(breakTime * 60)}</div>
               <div id="break-increment">
                 <button
-                  className="flex justify-center items-center mx-1 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
+                  className="flex justify-center items-center mx-1 transform active:scale-95 bg-gray-100 hover:bg-white p-2 w-10 h-10 md:w-5 md:h-5 rounded-full text-lg  font-thin shadow-md"
                   onClick={() => breakTime < 60 && setBreakTime((s) => s + 1)}
                 >
                   +
@@ -170,18 +186,24 @@ function App() {
           <div className="m-2 flex justify-center" id="session-count">
             {sessionCount > 0 && "Sessions: " + sessionCount}
           </div>
-          <div className="flex flex-row flex-wrap justify-center items-center">
+          <div className="flex flex-row flex-wrap justify-center items-center content-end p-12">
             <div id="start-stop">
               <button
-                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                className="m-3 py-4 px-8 md:py-2 md:px-4 transform active:translate-y-0.5 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
                 onClick={() => setTimerStatus((s) => !s)}
               >
-                {timerStatus ? "Pause" : "Start"}
+                {(sessionLengthLeft[0] !== sessionLength * 60 ||
+                  breakTimeLeft[0] !== breakTime * 60) &&
+                !timerStatus
+                  ? "Continue"
+                  : timerStatus
+                  ? "Pause"
+                  : "Start"}
               </button>
             </div>
             <div id="reset">
               <button
-                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                className="m-3 py-4 px-8 md:py-2 md:px-4 transform active:translate-y-0.5 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
                 onClick={reset}
               >
                 Reset
@@ -189,17 +211,15 @@ function App() {
             </div>
             <div id="skip">
               <button
-                className="m-3 py-4 px-8 md:py-2 md:px-4 active:mb-2 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
-                onClick={() =>
-                  breakStatus ? breakTimeLeft[1](0) : sessionLengthLeft[1](0)
-                }
+                className="m-3 py-4 px-8 md:py-2 md:px-4 transform active:translate-y-0.5 rounded bg-gray-100 hover:bg-white shadow-md uppercase font-thin text-gray-900"
+                onClick={skip}
               >
                 Skip
               </button>
             </div>
           </div>
         </div>
-        <audio src={ding} id="ding" />
+        <audio ref={audioRef} src={ding} id="ding" />
       </div>
     </div>
   );

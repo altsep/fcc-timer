@@ -18,7 +18,9 @@ module.exports = {
       padding: ['active'],
       width: ['active'],
       height: ['active'],
-      boxShadow: ['active'],
+      boxShadow: ['active'],  
+      translate: ['active'],
+      scale: ['active'],
     },
   },
   plugins: [
