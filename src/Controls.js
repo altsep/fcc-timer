@@ -10,18 +10,26 @@ function Controls({ text, length, setLength, convert, setError }) {
   useEffect(() => {
     const item = +localStorage.getItem(type);
     item && setLength(item);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const errorTextMin = 'Value is at its minimum';
   const errorTextMax = 'Value is at its maximum';
+  const errorTextEmpty = 'Input field is empty';
   useEffect(() => {
     localStorage.setItem(type, length);
   }, [length, type]);
-  const handleLength = (v) =>
-    v >= minValue && v <= maxValue
-      ? setLength(v)
-      : v < minValue
-      ? setError(errorTextMin)
-      : v > maxValue && setError(errorTextMax);
+  const handleLength = (v) => {
+    if (v >= minValue && v <= maxValue) setLength(v);
+    else if (!v) setError(errorTextEmpty);
+    else if (v < minValue) {
+      setLength(minValue);
+      setError(errorTextMin);
+    } else if (v > maxValue) {
+      setLength(maxValue);
+      setError(errorTextMax);
+    }
+  };
+
   return (
     <div
       className='m-2 flex flex-row justify-between w-full'
