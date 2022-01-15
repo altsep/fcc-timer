@@ -158,7 +158,7 @@ function App() {
                 <p className='my-3 md:my-2 font-serif text-gray-600'>
                   Current session
                 </p>
-                <p className='font-mono my-3 md:my-2 text-6xl'>
+                <p className='my-3 md:my-2 text-6xl'>
                   {convertTime(sessionLengthLeft)}
                 </p>
               </>
