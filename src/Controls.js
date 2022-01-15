@@ -18,9 +18,11 @@ function Controls({ text, length, setLength, convert, setError }) {
   useEffect(() => {
     localStorage.setItem(type, length);
   }, [length, type]);
-  const handleLength = (v) => {
+  const handleLength = () => {
+    const vStr = inputRef.current.value;
+    const v = +vStr;
     if (v >= minValue && v <= maxValue) setLength(v);
-    else if (!v) setError(errorTextEmpty);
+    else if (!vStr) setError(errorTextEmpty);
     else if (v < minValue) {
       setLength(minValue);
       setError(errorTextMin);
@@ -73,8 +75,7 @@ function Controls({ text, length, setLength, convert, setError }) {
             onClick={(e) => {
               setShowInput((s) => !s);
               const t = e.target.innerText;
-              const v = +inputRef.current.value;
-              if (t === 'Confirm') handleLength(v);
+              if (t === 'Confirm') handleLength();
               else setTimeout(() => inputRef.current.focus(), 1);
             }}
           >
@@ -92,9 +93,8 @@ function Controls({ text, length, setLength, convert, setError }) {
                 }, 100)
               }
               onKeyDown={(e) => {
-                const v = +e.target.value;
                 if (e.key === 'Enter') {
-                  handleLength(v);
+                  handleLength();
                   e.target.blur();
                 }
               }}
